@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useCallback, useMemo } from 'react';
+import { RadioButton } from './RadioButton';
 
 type Props = {
   /** 選択肢となるデータのリスト */
@@ -25,18 +26,15 @@ export const RadioSelector: React.FC<Props> = props => {
   const radioElements = useMemo(
     () =>
       choices.map(choice => (
-        <li key={choice.value}>
-          <label>
-            <input
-              value={choice.value}
-              type="radio"
-              data-testid="radio-item"
-              name={name}
-              checked={choice.value === value}
-              onChange={onChange}
-            />
+        <li key={choice.value} className="mb-2">
+          <RadioButton
+            value={choice.value}
+            name={name}
+            checked={choice.value === value}
+            onChange={onChange}
+          >
             {choice.displayValue}
-          </label>
+          </RadioButton>
         </li>
       )),
     [choices, name, onChange, value],

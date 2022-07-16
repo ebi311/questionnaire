@@ -1,23 +1,20 @@
 import classNames from 'classnames';
-import React, { InputHTMLAttributes, useId, useMemo } from 'react';
+import React, { InputHTMLAttributes, PropsWithChildren } from 'react';
 
 type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'type'>;
 
-export const RadioButton: React.FC<Props> = props => {
-  const { children, className, ..._props } = props;
-  const styles = useMemo(
-    () => ({
-      radio: classNames('radio', 'mr-2', 'checked:radio-primary', className),
-    }),
-    [className],
-  );
-  const id = useId();
+export const RadioButton: React.FC<PropsWithChildren<Props>> = props => {
+  const { children, className: _className, ..._props } = props;
+  const className = classNames(_className, 'radio', 'radio-primary');
   return (
-    <>
-      <input id={id} className={styles.radio} type="radio" {..._props} />
-      <label htmlFor={id} className="radio-label">
-        {children}
-      </label>
-    </>
+    <label className="flex align-middle">
+      <input
+        className={className}
+        {..._props}
+        type="radio"
+        data-testid="radio-item"
+      />
+      <div className="ml-2">{children}</div>
+    </label>
   );
 };

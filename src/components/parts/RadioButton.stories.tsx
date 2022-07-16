@@ -13,7 +13,13 @@ export default {
   argTypes: {
     checked: { control: 'boolean' },
   },
-  decorators: [Story => <StoryDecorator Story={Story} />],
+  decorators: [
+    Story => (
+      <StoryDecorator>
+        <Story />
+      </StoryDecorator>
+    ),
+  ],
 } as ComponentMeta<typeof RadioButton>;
 
 const Template: ComponentStory<typeof RadioButton> = args => {

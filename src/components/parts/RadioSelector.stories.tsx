@@ -23,7 +23,13 @@ const getProps = (): Props => ({
 export default {
   title: 'parts/RadioSelector',
   component: RadioSelector,
-  decorators: [story => <StoryDecorator Story={story} />],
+  decorators: [
+    Story => (
+      <StoryDecorator>
+        <Story />
+      </StoryDecorator>
+    ),
+  ],
 } as ComponentMeta<typeof RadioSelector>;
 
 const Template: ComponentStory<typeof RadioSelector> = args => {
