@@ -26,7 +26,7 @@ export const RadioSelector: React.FC<Props> = props => {
   const radioElements = useMemo(
     () =>
       choices.map(choice => (
-        <li key={choice.value}>
+        <li key={choice.value} className="mb-2">
           <RadioButton
             name={name}
             checked={choice.value === value}
