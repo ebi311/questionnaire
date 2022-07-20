@@ -6,8 +6,8 @@ v プロパティで指定した配列の数だけラジオボンタを表示す
 v ラジオボタンのラベルは、プロパティで指定した配列のdisplayValueを表示する。
 v 一意に選択できるようにする (radio の name に同じものを入れる)
 v プロパティ`value`に指定した値のラジオボタンが選択されている状態とする。
-o ラジオボタンを選択した時に、その項目の`value`を引数としプロパティの関数`onChange`を実行する。
-- value の型は自由に設定できる。
+v ラジオボタンを選択した時に、その項目の`value`を引数としプロパティの関数`onChange`を実行する。
+o ラジオボタンを別コンポーネントとして分離する
 */
 import { fireEvent } from '@storybook/testing-library';
 import '@testing-library/jest-dom';
