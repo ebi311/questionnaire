@@ -14,7 +14,13 @@ const getChoices = (): Props['choices'] => [
 export default {
   title: 'parts/CheckboxSelector',
   component: CheckboxSelector,
-  decorators: [story => <StoryDecorator Story={story} />],
+  decorators: [
+    Story => (
+      <StoryDecorator>
+        <Story />
+      </StoryDecorator>
+    ),
+  ],
 } as ComponentMeta<typeof CheckboxSelector>;
 
 const Template: ComponentStory<typeof CheckboxSelector> = props => {
