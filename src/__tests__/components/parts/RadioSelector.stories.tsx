@@ -1,9 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ComponentProps, useCallback, useState } from 'react';
-import { StoryDecorator } from '../StoryDecorator';
-import { CheckboxSelector } from './CheckboxSelector';
+import { StoryDecorator } from '~/components/StoryDecorator';
+import { RadioSelector } from '~/components/parts/RadioSelector';
 
-type Props = ComponentProps<typeof CheckboxSelector>;
+type Props = ComponentProps<typeof RadioSelector>;
 
 const getChoices = (): Props['choices'] => [
   { value: 'apple', displayValue: 'りんご' },
@@ -12,8 +12,8 @@ const getChoices = (): Props['choices'] => [
 ];
 
 export default {
-  title: 'parts/CheckboxSelector',
-  component: CheckboxSelector,
+  title: 'parts/RadioSelector',
+  component: RadioSelector,
   decorators: [
     Story => (
       <StoryDecorator>
@@ -21,18 +21,18 @@ export default {
       </StoryDecorator>
     ),
   ],
-} as ComponentMeta<typeof CheckboxSelector>;
+} as ComponentMeta<typeof RadioSelector>;
 
-const Template: ComponentStory<typeof CheckboxSelector> = props => {
+const Template: ComponentStory<typeof RadioSelector> = props => {
   const { value: _value, onChange: _onChange, ..._props } = props;
   const [value, setValue] = useState(_value);
-  const onChange = useCallback((value: string[]) => {
+  const onChange = useCallback((value: string) => {
     setValue(value);
   }, []);
 
   return (
     <form>
-      <CheckboxSelector {..._props} value={value} onChange={onChange} />
+      <RadioSelector {..._props} value={value} onChange={onChange} />
     </form>
   );
 };
@@ -42,5 +42,5 @@ export const Normal = Template.bind({});
 Normal.args = {
   choices: getChoices(),
   name: 'test',
-  value: ['orange'],
+  value: 'orange',
 };
