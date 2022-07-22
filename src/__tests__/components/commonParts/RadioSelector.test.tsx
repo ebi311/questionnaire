@@ -13,7 +13,7 @@ import { fireEvent } from '@storybook/testing-library';
 import '@testing-library/jest-dom';
 import { render } from '@testing-library/react';
 import { ComponentProps, useCallback, useState } from 'react';
-import { RadioSelector } from '~/components/parts/RadioSelector';
+import { RadioSelector } from '~/components/commonParts/RadioSelector';
 
 type Props = ComponentProps<typeof RadioSelector>;
 

@@ -9,7 +9,7 @@
 */
 import { fireEvent, render } from '@testing-library/react';
 import { ChangeEvent, useCallback, useState } from 'react';
-import { TextArea } from '~/components/parts/TextArea';
+import { TextArea } from '~/components/commonParts/TextArea';
 
 const TestComponent = (props: { label: string; value: string }) => {
   const [value, setValue] = useState(props.value);

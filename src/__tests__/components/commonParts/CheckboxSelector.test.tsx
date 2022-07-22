@@ -12,7 +12,7 @@ o チェックボックスを選択した時に、その項目の`value`を引�
 import '@testing-library/jest-dom';
 import { fireEvent, render } from '@testing-library/react';
 import { ComponentProps, useCallback, useState } from 'react';
-import { CheckboxSelector } from '~/components/parts/CheckboxSelector';
+import { CheckboxSelector } from '~/components/commonParts/CheckboxSelector';
 
 type Props = ComponentProps<typeof CheckboxSelector>;
 
