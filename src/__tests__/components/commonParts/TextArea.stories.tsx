@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ChangeEvent, ComponentProps, useCallback, useState } from 'react';
-import { StoryDecorator } from '~/components/StoryDecorator';
+import { StoryDecorator } from '~/__tests__/components/StoryDecorator';
 import { TextArea } from '~/components/commonParts/TextArea';
 
 export default {

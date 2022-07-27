@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ComponentProps, useCallback, useState } from 'react';
-import { StoryDecorator } from '~/components/StoryDecorator';
+import { StoryDecorator } from '../StoryDecorator';
 import { RadioSelector } from '~/components/commonParts/RadioSelector';
 
 type Props = ComponentProps<typeof RadioSelector>;

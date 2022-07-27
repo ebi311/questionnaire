@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ComponentProps, useCallback, useState } from 'react';
-import { StoryDecorator } from '~/components/StoryDecorator';
+import { StoryDecorator } from '~/__tests__/components/StoryDecorator';
 import { CheckboxSelector } from '~/components/commonParts/CheckboxSelector';
 
 type Props = ComponentProps<typeof CheckboxSelector>;
