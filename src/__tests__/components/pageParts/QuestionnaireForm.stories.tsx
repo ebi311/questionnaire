@@ -53,4 +53,5 @@ export const NewPost = Template.bind({});
 
 NewPost.args = {
   questions: getChoices(),
+  answers: [['apple', 'banana'], 'cabbage', 'げたんは'],
 };
