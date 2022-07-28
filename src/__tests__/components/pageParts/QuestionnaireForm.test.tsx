@@ -9,6 +9,7 @@ import { Question } from '~/models/question';
 
 const getChoices = (): Question[] => [
   {
+    id: '001',
     type: 'multiple',
     name: 'fruits',
     question: '好きな果物は？',
@@ -19,6 +20,7 @@ const getChoices = (): Question[] => [
     ],
   },
   {
+    id: '002',
     type: 'single',
     name: 'vegetables',
     question: '苦手な野菜は？',
@@ -29,6 +31,7 @@ const getChoices = (): Question[] => [
     ],
   },
   {
+    id: '003',
     type: 'text',
     question: '好きな料理を教えてください。',
     name: 'favoriteMeal',
@@ -39,7 +42,7 @@ const render = (props: ComponentProps<typeof QuestionnaireForm>) =>
   _render(<QuestionnaireForm {...props}></QuestionnaireForm>);
 
 test('show input name', () => {
-  const target = render({ questions: getChoices() });
+  const target = render({ questions: getChoices(), onCommit: jest.fn() });
   const nameInput = target.getByLabelText('回答者氏名') as HTMLInputElement;
   expect(nameInput).toBeInTheDocument();
   fireEvent.change(nameInput, { target: { value: 'test' } });
@@ -47,7 +50,7 @@ test('show input name', () => {
 });
 
 test('show questions', () => {
-  const target = render({ questions: getChoices() });
+  const target = render({ questions: getChoices(), onCommit: jest.fn() });
   const questions = target.getByTestId('question-list').children;
   expect(questions).toHaveLength(3);
   // 1番目はチェックボックスリスト
@@ -70,7 +73,10 @@ test('show questions', () => {
 
 test('show questions2', () => {
   const choices = getChoices();
-  const target = render({ questions: [choices[1], choices[2], choices[0]] });
+  const target = render({
+    questions: [choices[1], choices[2], choices[0]],
+    onCommit: jest.fn(),
+  });
   const questions = target.getByTestId('question-list').children;
   expect(questions).toHaveLength(3);
   // 1番目はラジオボタンリスト
@@ -88,7 +94,7 @@ test('show questions2', () => {
 });
 
 test('input answers', () => {
-  const target = render({ questions: getChoices() });
+  const target = render({ questions: getChoices(), onCommit: jest.fn() });
   const appleCheckbox = target.getByLabelText('りんご') as HTMLInputElement;
   // 初期はチェックされていない
   expect(appleCheckbox.checked).toBe(false);
@@ -110,7 +116,15 @@ test('input answers', () => {
 test('set default answers', () => {
   const target = render({
     questions: getChoices(),
-    answers: [['orange'], 'cabbage', 'ドリア'],
+    answer: {
+      name: '',
+      answers: [
+        { questionnaireId: '001', answer: ['orange'] },
+        { questionnaireId: '002', answer: 'cabbage' },
+        { questionnaireId: '003', answer: 'ドリア' },
+      ],
+    },
+    onCommit: jest.fn(),
   });
 
   const orangeCheckbox = target.getByLabelText('オレンジ') as HTMLInputElement;
@@ -121,4 +135,33 @@ test('set default answers', () => {
   expect(cabbageRadiobutton.checked).toBe(true);
   const favoriteMeal = target.getByLabelText('100文字以内') as HTMLInputElement;
   expect(favoriteMeal.value).toBe('ドリア');
+});
+
+test('on commit', () => {
+  const onCommit = jest.fn();
+  const target = render({
+    questions: getChoices(),
+    answer: {
+      name: '',
+      answers: [
+        { questionnaireId: '001', answer: ['orange'] },
+        { questionnaireId: '002', answer: 'cabbage' },
+        { questionnaireId: '003', answer: 'ドリア' },
+      ],
+    },
+    onCommit,
+  });
+
+  const nameInput = target.getByLabelText('回答者氏名') as HTMLInputElement;
+  fireEvent.change(nameInput, { target: { value: '海老原 賢次' } });
+  const commitButton = target.getByText('回答する') as HTMLButtonElement;
+  fireEvent.click(commitButton);
+  expect(onCommit).toHaveBeenCalledWith({
+    name: '海老原 賢次',
+    answers: [
+      { questionnaireId: '001', answer: ['orange'] },
+      { questionnaireId: '002', answer: 'cabbage' },
+      { questionnaireId: '003', answer: 'ドリア' },
+    ],
+  });
 });

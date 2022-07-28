@@ -1,6 +1,8 @@
 type Choice = { value: string; displayValue: string };
 
 export type QuestionBase = {
+  /** 一意に判別する識別子 */
+  id: string;
   /** HTML の name 属性に当たるもの */
   name: string;
   /** 質問 */

@@ -19,6 +19,7 @@ export default {
 
 const getChoices = (): Question[] => [
   {
+    id: '001',
     type: 'multiple',
     name: 'fruits',
     question: '好きな果物は？',
@@ -29,6 +30,7 @@ const getChoices = (): Question[] => [
     ],
   },
   {
+    id: '002',
     type: 'single',
     name: 'vegetables',
     question: '苦手な野菜は？',
@@ -39,6 +41,7 @@ const getChoices = (): Question[] => [
     ],
   },
   {
+    id: '003',
     type: 'text',
     question: '好きな料理を教えてください',
     name: 'comment',
@@ -53,5 +56,12 @@ export const NewPost = Template.bind({});
 
 NewPost.args = {
   questions: getChoices(),
-  answers: [['apple', 'banana'], 'cabbage', 'げたんは'],
+  answer: {
+    name: 'ebihara',
+    answers: [
+      { questionnaireId: '001', answer: ['apple', 'banana'] },
+      { questionnaireId: '002', answer: 'cabbage' },
+      { questionnaireId: '003', answer: 'げたんは' },
+    ],
+  },
 };

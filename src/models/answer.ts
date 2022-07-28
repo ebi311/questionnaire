@@ -1,6 +1,4 @@
 export type Answer = {
-  id: string;
   questionnaireId: string;
-  name: string;
-  answers: string[];
+  answer: string | string[];
 };

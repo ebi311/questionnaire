@@ -1,4 +1,11 @@
-import React, { useId, useMemo, useState } from 'react';
+import React, {
+  ChangeEvent,
+  useCallback,
+  useId,
+  useMemo,
+  useState,
+} from 'react';
+import { Answer } from '~/models/answer';
 import { MultipleChoice, Question, SingleChoice } from '~/models/question';
 import { CheckboxSelector } from '../commonParts/CheckboxSelector';
 import { RadioSelector } from '../commonParts/RadioSelector';
@@ -37,37 +44,69 @@ const getAnswerControl: {
   ),
 };
 
-type Props = {
-  questions: Question[];
-  answers?: [string[], string, string];
+type QuestionnaireAnswer = { name: string; answers: Answer[] };
+
+const createQuestionElement = (
+  q: Question,
+  setValue: React.Dispatch<
+    React.SetStateAction<{
+      name: string;
+      answers: Answer[];
+    }>
+  >,
+  value: QuestionnaireAnswer,
+) => {
+  const answer = value.answers.find(a => a.questionnaireId === q.id) || {
+    answer: '',
+    questionnaireId: q.id,
+  };
+  const element = getAnswerControl[q.type](q, answer?.answer, v =>
+    setValue(stateValue => {
+      answer.answer = v;
+      const newAnswer = stateValue.answers.filter(
+        a => a.questionnaireId !== q.id,
+      );
+      return { ...stateValue, answers: [...newAnswer, answer] };
+    }),
+  );
+  return (
+    <div key={q.id}>
+      <p>{q.question}</p>
+      {element}
+    </div>
+  );
 };
 
-const initAnswers = [[], '', ''] as [string[], string, string];
+type Props = {
+  questions: Question[];
+  answer?: QuestionnaireAnswer;
+  onCommit: (arg: QuestionnaireAnswer) => void;
+};
+
+const initAnswers: QuestionnaireAnswer = {
+  name: '',
+  answers: [],
+};
 
 export const QuestionnaireForm = (props: Props) => {
-  const { questions, answers } = props;
-  const [value, setValue] = useState(answers || initAnswers);
+  const { questions, answer, onCommit: _onCommit } = props;
+  const [value, setValue] = useState(answer || initAnswers);
 
   const questionElements = useMemo(
-    () =>
-      questions.map((q, i) => {
-        const element = getAnswerControl[q.type](q, value[i], v =>
-          setValue(stateValue => {
-            stateValue[i] = v;
-            return [...stateValue];
-          }),
-        );
-        return (
-          <div key={i}>
-            <p>{q.question}</p>
-            {element}
-          </div>
-        );
-      }),
+    () => questions.map(q => createQuestionElement(q, setValue, value)),
     [questions, value],
   );
 
   const id = useId();
+
+  const onCommit = useCallback(() => {
+    _onCommit(value);
+  }, [_onCommit, value]);
+
+  const onNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setValue(stateValue => ({ ...stateValue, name: e.target.value }));
+  }, []);
+
   return (
     <form>
       <div>
@@ -78,10 +117,15 @@ export const QuestionnaireForm = (props: Props) => {
           id={id}
           type="text"
           data-testid="respondent"
+          value={value.name}
+          onChange={onNameChange}
           className="input input-primary"
         />
       </div>
       <div data-testid="question-list">{questionElements}</div>
+      <div>
+        <button onClick={onCommit}>回答する</button>
+      </div>
     </form>
   );
 };
