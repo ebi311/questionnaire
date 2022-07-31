@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { Answer } from '~/models/answer';
+import { Answer, QuestionnaireAnswer } from '~/models/answer';
 import { MultipleChoice, Question, SingleChoice } from '~/models/question';
 import { CheckboxSelector } from '../commonParts/CheckboxSelector';
 import { RadioSelector } from '../commonParts/RadioSelector';
@@ -43,8 +43,6 @@ const getAnswerControl: {
     />
   ),
 };
-
-type QuestionnaireAnswer = { name: string; answers: Answer[] };
 
 const createQuestionElement = (
   q: Question,

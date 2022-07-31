@@ -1,11 +1,12 @@
 /**
  * @jest-environment jsdom
  */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import '@testing-library/jest-dom';
 import { render as _render } from '@testing-library/react';
 import { ComponentProps } from 'react';
 import { Question } from '~/models/question';
-import Answer from '~/pages/questions/[questionId]/answers/[answersId]';
+import Answer from '~/pages/questions/[questionId]/answers';
 
 const getChoices = (): Question[] => [
   {
@@ -45,18 +46,20 @@ test('show answer page', () => {
   const target = render({ questions: getChoices() });
   const question1Choices = target
     .getByText('好きな果物は？')
-    .parentElement?.querySelectorAll('ul li input');
-  if (!question1Choices) {
-    return expect(true).toBe(false);
-  }
+    .parentElement!.querySelectorAll('ul li input');
+  expect(question1Choices).toHaveLength(3);
+  question1Choices.forEach(choice =>
+    expect(choice).not.toHaveAttribute('checked'),
+  );
   const question2Choices = target
     .getByText('苦手な野菜は？')
-    .parentElement?.querySelectorAll('ul li input');
-  if (!question2Choices) {
-    return expect(true).toBe(false);
-  }
+    .parentElement!.querySelectorAll('ul li input');
   expect(question2Choices).toHaveLength(3);
   question2Choices.forEach(choice =>
     expect(choice).not.toHaveAttribute('checked'),
   );
+  const question3 = target
+    .getByText('好きな料理を教えてください。')
+    .parentElement!.querySelector('textarea') as HTMLTextAreaElement;
+  expect(question3.value).toBe('');
 });

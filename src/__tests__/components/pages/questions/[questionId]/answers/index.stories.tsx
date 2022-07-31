@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
-import Answer from '~/pages/questions/[questionId]/answers/[answersId]';
-import { StoryDecorator } from '../../../../../StoryDecorator';
+import Answer from '~/pages/questions/[questionId]/answers';
+import { StoryDecorator } from '../../../../StoryDecorator';
 
 export default {
   title: 'pages/answer/index',
