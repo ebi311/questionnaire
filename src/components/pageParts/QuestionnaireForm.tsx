@@ -124,7 +124,9 @@ export const QuestionnaireForm = (props: Props) => {
       </div>
       <div data-testid="question-list">{questionElements}</div>
       <div>
-        <button onClick={onCommit}>回答する</button>
+        <button onClick={onCommit} className="btn btn-primary btn-wide">
+          回答する
+        </button>
       </div>
     </form>
   );
