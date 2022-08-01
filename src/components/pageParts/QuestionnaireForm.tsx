@@ -84,7 +84,7 @@ const getAnswerControl: {
           {errors.answers?.[index] ? (
             <label className="label">
               <span className="label-text-alt text-error">
-                入入力してください。
+                入力してください。
               </span>
             </label>
           ) : null}
