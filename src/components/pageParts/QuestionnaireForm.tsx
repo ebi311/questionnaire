@@ -12,8 +12,6 @@ const getAnswerControl: {
     control: Control;
     index: number;
     errors: FieldErrors<QuestionnaireAnswer>;
-    // value: string | string[],
-    // onChange: (value: string | string[]) => void,
   }) => JSX.Element;
 } = {
   multiple: ({ q, control, index, errors }) => (
@@ -33,7 +31,11 @@ const getAnswerControl: {
               name={name}
             />
             {errors.answers?.[index] ? (
-              <p className="label text-error">1つ以上選択してください。</p>
+              <label className="label">
+                <span className="label-text-alt text-error">
+                  1つ以上選択してください。
+                </span>
+              </label>
             ) : null}
           </>
         );
@@ -56,7 +58,11 @@ const getAnswerControl: {
             }}
           />
           {errors.answers?.[index] ? (
-            <p className="label text-error">1つ選択してください。</p>
+            <label className="label">
+              <span className="label-text-alt text-error">
+                1つ選択してください。
+              </span>
+            </label>
           ) : null}
         </>
       )}
@@ -72,13 +78,15 @@ const getAnswerControl: {
           <TextArea
             name={name}
             value={value}
-            onChange={v => {
-              onChange(v);
-            }}
+            onChange={onChange}
             label="100文字以内"
           />
           {errors.answers?.[index] ? (
-            <p className="label text-error">入力してください。</p>
+            <label className="label">
+              <span className="label-text-alt text-error">
+                入入力してください。
+              </span>
+            </label>
           ) : null}
         </>
       )}
@@ -169,7 +177,11 @@ export const QuestionnaireForm = (props: Props) => {
       </div>
       <div data-testid="question-list">{questionElements}</div>
       <div>
-        <button onClick={onCommit} className="btn btn-primary btn-wide">
+        <button
+          type="button"
+          onClick={onCommit}
+          className="btn btn-primary btn-wide"
+        >
           回答する
         </button>
       </div>
