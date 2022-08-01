@@ -24,7 +24,7 @@ export default {
 } as ComponentMeta<typeof RadioSelector>;
 
 const Template: ComponentStory<typeof RadioSelector> = props => {
-  const { value: _value, onChange: _onChange, ..._props } = props;
+  const { value: _value, ..._props } = props;
   const [value, setValue] = useState(_value);
   const onChange = useCallback((value: string) => {
     setValue(value);

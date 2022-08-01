@@ -24,7 +24,7 @@ export default {
 } as ComponentMeta<typeof CheckboxSelector>;
 
 const Template: ComponentStory<typeof CheckboxSelector> = props => {
-  const { value: _value, onChange: _onChange, ..._props } = props;
+  const { value: _value, ..._props } = props;
   const [value, setValue] = useState(_value);
   const onChange = useCallback((value: string[]) => {
     setValue(value);

@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { ChangeEvent, ComponentProps, useCallback, useState } from 'react';
-import { StoryDecorator } from '~/__tests__/components/StoryDecorator';
+import { ChangeEvent, useCallback, useState } from 'react';
 import { TextArea } from '~/components/commonParts/TextArea';
+import { StoryDecorator } from '~/__tests__/components/StoryDecorator';
 
 export default {
   title: 'parts/TextArea',
@@ -16,7 +16,7 @@ export default {
 } as ComponentMeta<typeof TextArea>;
 
 const Template: ComponentStory<typeof TextArea> = props => {
-  const { value: _value, onChange: _onChange, ..._props } = props;
+  const { value: _value, ..._props } = props;
   const [value, setValue] = useState(_value);
   const onChange = useCallback(
     (e: ChangeEvent<HTMLTextAreaElement>) => {

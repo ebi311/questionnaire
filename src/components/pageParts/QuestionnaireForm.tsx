@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useId, useMemo } from 'react';
 import { Control, Controller, FieldErrors, useForm } from 'react-hook-form';
 import { Answer, QuestionnaireAnswer } from '~/models/answer';
@@ -135,7 +134,7 @@ export const QuestionnaireForm = (props: Props) => {
           formState.errors,
         ),
       ),
-    [questions, control, formState.errors],
+    [questions, control, value, formState.errors],
   );
 
   const id = useId();
