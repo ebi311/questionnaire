@@ -64,4 +64,5 @@ NewPost.args = {
       { questionnaireId: '003', answer: 'げたんは' },
     ],
   },
+  onCommit: () => console.log('on commit'),
 };

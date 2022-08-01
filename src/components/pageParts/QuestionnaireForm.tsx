@@ -1,10 +1,6 @@
-import React, {
-  ChangeEvent,
-  useCallback,
-  useId,
-  useMemo,
-  useState,
-} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useCallback, useId, useMemo } from 'react';
+import { Control, Controller, FieldErrors, useForm } from 'react-hook-form';
 import { Answer, QuestionnaireAnswer } from '~/models/answer';
 import { MultipleChoice, Question, SingleChoice } from '~/models/question';
 import { CheckboxSelector } from '../commonParts/CheckboxSelector';
@@ -12,65 +8,97 @@ import { RadioSelector } from '../commonParts/RadioSelector';
 import { TextArea } from '../commonParts/TextArea';
 
 const getAnswerControl: {
-  [key in Question['type']]: (
-    q: Question,
-    value: string | string[],
-    onChange: (value: string | string[]) => void,
-  ) => JSX.Element;
+  [key in Question['type']]: (props: {
+    q: Question;
+    control: Control;
+    index: number;
+    errors: FieldErrors<QuestionnaireAnswer>;
+    // value: string | string[],
+    // onChange: (value: string | string[]) => void,
+  }) => JSX.Element;
 } = {
-  multiple: (q, value, onChange) => (
-    <CheckboxSelector
-      choices={(q as MultipleChoice).choices}
-      value={value as string[]}
-      onChange={onChange}
-      name={q.name}
+  multiple: ({ q, control, index, errors }) => (
+    <Controller
+      control={control}
+      name={`answers[${index}].answer`}
+      rules={{ required: true }}
+      render={({ field: { value, name, onChange } }) => {
+        return (
+          <>
+            <CheckboxSelector
+              choices={(q as MultipleChoice).choices}
+              value={value}
+              onChange={v => {
+                onChange(v);
+              }}
+              name={name}
+            />
+            {errors.answers?.[index] ? (
+              <p className="label text-error">1つ以上選択してください。</p>
+            ) : null}
+          </>
+        );
+      }}
     />
   ),
-  single: (q, value, onChange) => (
-    <RadioSelector
-      choices={(q as SingleChoice).choices}
-      name={q.name}
-      value={value as string}
-      onChange={onChange}
+  single: ({ q, control, index, errors }) => (
+    <Controller
+      control={control}
+      name={`answers[${index}].answer`}
+      rules={{ required: true }}
+      render={({ field: { value, name, onChange } }) => (
+        <>
+          <RadioSelector
+            choices={(q as SingleChoice).choices}
+            name={name}
+            value={value}
+            onChange={v => {
+              onChange(v);
+            }}
+          />
+          {errors.answers?.[index] ? (
+            <p className="label text-error">1つ選択してください。</p>
+          ) : null}
+        </>
+      )}
     />
   ),
-  text: (q, value, onChange) => (
-    <TextArea
-      name={q.name}
-      value={value as string}
-      onChange={e => onChange(e.target.value)}
-      label="100文字以内"
+  text: ({ control, index, errors }) => (
+    <Controller
+      control={control}
+      name={`answers[${index}].answer`}
+      rules={{ required: true }}
+      render={({ field: { value, name, onChange } }) => (
+        <>
+          <TextArea
+            name={name}
+            value={value}
+            onChange={v => {
+              onChange(v);
+            }}
+            label="100文字以内"
+          />
+          {errors.answers?.[index] ? (
+            <p className="label text-error">入力してください。</p>
+          ) : null}
+        </>
+      )}
     />
   ),
 };
 
 const createQuestionElement = (
   q: Question,
-  setValue: React.Dispatch<
-    React.SetStateAction<{
-      name: string;
-      answers: Answer[];
-    }>
-  >,
+  control: Control,
   value: QuestionnaireAnswer,
+  errors: FieldErrors<QuestionnaireAnswer>,
 ) => {
-  const answer = value.answers.find(a => a.questionnaireId === q.id) || {
-    answer: '',
-    questionnaireId: q.id,
-  };
-  const element = getAnswerControl[q.type](q, answer?.answer, v =>
-    setValue(stateValue => {
-      answer.answer = v;
-      const newAnswer = stateValue.answers.filter(
-        a => a.questionnaireId !== q.id,
-      );
-      return { ...stateValue, answers: [...newAnswer, answer] };
-    }),
-  );
+  const index = value.answers.findIndex(a => a.questionnaireId === q.id);
+  const Element = getAnswerControl[q.type];
   return (
     <div key={q.id}>
       <p>{q.question}</p>
-      {element}
+      <Element control={control} index={index} q={q} errors={errors} />
     </div>
   );
 };
@@ -81,29 +109,43 @@ type Props = {
   onCommit: (arg: QuestionnaireAnswer) => void;
 };
 
-const initAnswers: QuestionnaireAnswer = {
-  name: '',
-  answers: [],
+const initAnswers = (q: Question[]): QuestionnaireAnswer => {
+  const answers: Answer[] = q.map(q => ({
+    answer: q.type === 'multiple' ? [] : '',
+    questionnaireId: q.id,
+  }));
+  return { name: '', answers };
 };
 
 export const QuestionnaireForm = (props: Props) => {
   const { questions, answer, onCommit: _onCommit } = props;
-  const [value, setValue] = useState(answer || initAnswers);
+  const { register, getValues, trigger, formState, control, watch } = useForm({
+    defaultValues: answer || initAnswers(questions),
+  });
+
+  const value = watch();
 
   const questionElements = useMemo(
-    () => questions.map(q => createQuestionElement(q, setValue, value)),
-    [questions, value],
+    () =>
+      questions.map(q =>
+        createQuestionElement(
+          q,
+          control as unknown as Control,
+          value,
+          formState.errors,
+        ),
+      ),
+    [questions, control, formState.errors],
   );
 
   const id = useId();
 
-  const onCommit = useCallback(() => {
+  const onCommit = useCallback(async () => {
+    const valid = await trigger();
+    if (!valid) return;
+    const value = getValues();
     _onCommit(value);
-  }, [_onCommit, value]);
-
-  const onNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setValue(stateValue => ({ ...stateValue, name: e.target.value }));
-  }, []);
+  }, [_onCommit, getValues, trigger]);
 
   return (
     <form>
@@ -115,10 +157,16 @@ export const QuestionnaireForm = (props: Props) => {
           id={id}
           type="text"
           data-testid="respondent"
-          value={value.name}
-          onChange={onNameChange}
           className="input input-primary"
+          {...register('name', { required: true })}
         />
+        {formState.errors.name ? (
+          <label htmlFor={id} className="label">
+            <span className="label-text text-error">
+              回答者氏名を入力してください。
+            </span>
+          </label>
+        ) : null}
       </div>
       <div data-testid="question-list">{questionElements}</div>
       <div>

@@ -3,7 +3,12 @@
  */
 import React, { ComponentProps } from 'react';
 import { QuestionnaireForm } from '~/components/pageParts/QuestionnaireForm';
-import { fireEvent, render as _render, within } from '@testing-library/react';
+import {
+  fireEvent,
+  render as _render,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Question } from '~/models/question';
 
@@ -137,7 +142,7 @@ test('set default answers', () => {
   expect(favoriteMeal.value).toBe('ドリア');
 });
 
-test('on commit', () => {
+test('on commit', async () => {
   const onCommit = jest.fn();
   const target = render({
     questions: getChoices(),
@@ -156,12 +161,43 @@ test('on commit', () => {
   fireEvent.change(nameInput, { target: { value: '海老原 賢次' } });
   const commitButton = target.getByText('回答する') as HTMLButtonElement;
   fireEvent.click(commitButton);
-  expect(onCommit).toHaveBeenCalledWith({
-    name: '海老原 賢次',
-    answers: [
-      { questionnaireId: '001', answer: ['orange'] },
-      { questionnaireId: '002', answer: 'cabbage' },
-      { questionnaireId: '003', answer: 'ドリア' },
-    ],
+
+  expect(
+    target.queryByText('回答者氏名を入力してください。'),
+  ).not.toBeInTheDocument();
+  expect(
+    target.queryByText('1つ以上選択してください。'),
+  ).not.toBeInTheDocument();
+  expect(target.queryByText('１つ選択してください。')).not.toBeInTheDocument();
+  expect(target.queryByText('入力してください。')).not.toBeInTheDocument();
+
+  await waitFor(() =>
+    expect(onCommit).toHaveBeenCalledWith({
+      name: '海老原 賢次',
+      answers: [
+        { questionnaireId: '001', answer: ['orange'] },
+        { questionnaireId: '002', answer: 'cabbage' },
+        { questionnaireId: '003', answer: 'ドリア' },
+      ],
+    }),
+  );
+});
+
+test('validation', async () => {
+  const onCommit = jest.fn();
+  const target = render({
+    questions: getChoices(),
+    onCommit,
   });
+  const commitButton = target.getByText('回答する') as HTMLButtonElement;
+  fireEvent.click(commitButton);
+  expect(
+    await target.findByText('回答者氏名を入力してください。'),
+  ).toBeInTheDocument();
+  expect(
+    await target.findByText('1つ以上選択してください。'),
+  ).toBeInTheDocument();
+  expect(await target.findByText('1つ選択してください。')).toBeInTheDocument();
+  expect(await target.findByText('入力してください。')).toBeInTheDocument();
+  expect(onCommit).not.toBeCalled();
 });
