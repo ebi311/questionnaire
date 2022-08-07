@@ -41,7 +41,7 @@ jest.mock('fs/promises', () => ({
 test('get question by id', async () => {
   const result = await getQuestionnaire('001');
   expect(fs.readFile).toBeCalledWith(
-    path.resolve('./data/questions/001.json'),
+    path.resolve('./data/questionnaires/001.json'),
     { encoding: 'utf-8' },
   );
   expect(result).toEqual(getDummyQuestions());
