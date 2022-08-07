@@ -1,0 +1,31 @@
+[
+  {
+    "id": "001",
+    "type": "single",
+    "name": "country",
+    "question": "お住まいの県は？",
+    "choices": [
+      { "value": "okayama", "displayValue": "岡山県" },
+      { "value": "hyogo", "displayValue": "兵庫県" },
+      { "value": "kagoshima", "displayValue": "鹿児島県" }
+    ]
+  },
+  {
+    "id": "002",
+    "type": "text",
+    "question": "市町村を入力してください。",
+    "name": "town"
+  },
+  {
+    "id": "003",
+    "type": "multiple",
+    "name": "language",
+    "question": "得意な言語は？",
+    "choices": [
+      { "value": "ruby", "displayValue": "Ruby" },
+      { "value": "javascript", "displayValue": "JavaScript" },
+      { "value": "c-sharp", "displayValue": "C#" },
+      { "value": "java", "displayValue": "Java" }
+    ]
+  }
+]
