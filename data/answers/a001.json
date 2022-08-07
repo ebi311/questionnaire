@@ -4,10 +4,8 @@
     {
       "questionId": "001",
       "answer": [
-        [
-          "apple",
-          "orange"
-        ]
+        "apple",
+        "orange"
       ]
     },
     {
