@@ -1,0 +1,22 @@
+{
+  "name": "海老原 賢次",
+  "answers": [
+    {
+      "questionId": "001",
+      "answer": [
+        [
+          "apple",
+          "orange"
+        ]
+      ]
+    },
+    {
+      "questionId": "002",
+      "answer": "lettuce"
+    },
+    {
+      "questionId": "003",
+      "answer": "鶏飯"
+    }
+  ]
+}

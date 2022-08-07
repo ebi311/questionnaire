@@ -7,7 +7,7 @@ import { render as _render } from '@testing-library/react';
 import { ComponentProps } from 'react';
 import { QuestionnaireAnswer } from '~/models/answer';
 import { Question } from '~/models/question';
-import AnswerPage from '~/pages/questions/[questionnaireId]/answers/[answerId]';
+import AnswerPage from '~/pages/questionnaires/[questionnaireId]/answers/[answerId]';
 
 const getChoices = (): Question[] => [
   {

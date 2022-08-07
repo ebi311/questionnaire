@@ -6,7 +6,7 @@ import '@testing-library/jest-dom';
 import { fireEvent, render as _render, waitFor } from '@testing-library/react';
 import { ComponentProps } from 'react';
 import { Question } from '~/models/question';
-import AnswerPage from '~/pages/questions/[questionnaireId]/answers';
+import AnswerPage from '~/pages/questionnaires/[questionnaireId]/answers';
 import stringify from 'json-stable-stringify';
 
 const getChoices = (): Question[] => [

@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
-import AnswerPage from '~/pages/questions/[questionnaireId]/answers/[answerId]';
+import AnswerPage from '~/pages/questionnaires/[questionnaireId]/answers/[answerId]';
 import { StoryDecorator } from '~/__tests__/components/StoryDecorator';
 
 export default {

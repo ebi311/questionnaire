@@ -1,4 +1,4 @@
-import { getQuestions } from '~/data/questions';
+import { getQuestionnaire } from '~/data/questionnaires';
 import { Question } from '~/models/question';
 import fs from 'fs/promises';
 import path from 'path';
@@ -39,7 +39,7 @@ jest.mock('fs/promises', () => ({
 }));
 
 test('get question by id', async () => {
-  const result = await getQuestions('001');
+  const result = await getQuestionnaire('001');
   expect(fs.readFile).toBeCalledWith(
     path.resolve('./data/questions/001.json'),
     { encoding: 'utf-8' },
