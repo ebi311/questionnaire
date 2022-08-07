@@ -18,7 +18,9 @@ const getAnswerControl: {
     <Controller
       control={control}
       name={`answers[${index}].answer`}
-      rules={{ required: true }}
+      rules={{
+        required: '1つ以上選択してください。',
+      }}
       render={({ field: { value, name, onChange } }) => {
         return (
           <>
@@ -33,7 +35,7 @@ const getAnswerControl: {
             {errors.answers?.[index] ? (
               <label className="label">
                 <span className="label-text-alt text-error">
-                  1つ以上選択してください。
+                  {errors.answers?.[index]?.answer?.message}
                 </span>
               </label>
             ) : null}
@@ -46,7 +48,7 @@ const getAnswerControl: {
     <Controller
       control={control}
       name={`answers[${index}].answer`}
-      rules={{ required: true }}
+      rules={{ required: '1つ選択してください。' }}
       render={({ field: { value, name, onChange } }) => (
         <>
           <RadioSelector
@@ -57,13 +59,11 @@ const getAnswerControl: {
               onChange(v);
             }}
           />
-          {errors.answers?.[index] ? (
-            <label className="label">
-              <span className="label-text-alt text-error">
-                1つ選択してください。
-              </span>
-            </label>
-          ) : null}
+          <label className="label">
+            <span className="label-text-alt text-error">
+              {errors.answers?.[index]?.answer?.message}
+            </span>
+          </label>
         </>
       )}
     />
@@ -72,7 +72,7 @@ const getAnswerControl: {
     <Controller
       control={control}
       name={`answers[${index}].answer`}
-      rules={{ required: true }}
+      rules={{ required: '入力してください。' }}
       render={({ field: { value, name, onChange } }) => (
         <>
           <TextArea
@@ -81,13 +81,11 @@ const getAnswerControl: {
             onChange={onChange}
             label="100文字以内"
           />
-          {errors.answers?.[index] ? (
-            <label className="label">
-              <span className="label-text-alt text-error">
-                入力してください。
-              </span>
-            </label>
-          ) : null}
+          <label className="label">
+            <span className="label-text-alt text-error">
+              {errors.answers?.[index]?.answer?.message}
+            </span>
+          </label>
         </>
       )}
     />
@@ -100,7 +98,10 @@ const createQuestionElement = (
   value: QuestionnaireAnswer,
   errors: FieldErrors<QuestionnaireAnswer>,
 ) => {
-  const index = value.answers.findIndex(a => a.questionnaireId === q.id);
+  const index = value.answers.findIndex(a => a.questionId === q.id);
+  if (index === -1) {
+    throw new Error('Answer not found');
+  }
   const Element = getAnswerControl[q.type];
   return (
     <div key={q.id}>
@@ -119,7 +120,7 @@ type Props = {
 const initAnswers = (q: Question[]): QuestionnaireAnswer => {
   const answers: Answer[] = q.map(q => ({
     answer: q.type === 'multiple' ? [] : '',
-    questionnaireId: q.id,
+    questionId: q.id,
   }));
   return { name: '', answers };
 };

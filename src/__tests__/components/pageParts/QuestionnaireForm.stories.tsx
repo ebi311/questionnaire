@@ -59,9 +59,9 @@ NewPost.args = {
   answer: {
     name: 'ebihara',
     answers: [
-      { questionnaireId: '001', answer: ['apple', 'banana'] },
-      { questionnaireId: '002', answer: 'cabbage' },
-      { questionnaireId: '003', answer: 'げたんは' },
+      { questionId: '001', answer: ['apple', 'banana'] },
+      { questionId: '002', answer: 'cabbage' },
+      { questionId: '003', answer: 'げたんは' },
     ],
   },
   onCommit: () => console.log('on commit'),

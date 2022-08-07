@@ -3,10 +3,11 @@
  */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import '@testing-library/jest-dom';
-import { render as _render } from '@testing-library/react';
+import { fireEvent, render as _render, waitFor } from '@testing-library/react';
 import { ComponentProps } from 'react';
 import { Question } from '~/models/question';
-import Answer from '~/pages/questions/[questionId]/answers';
+import AnswerPage from '~/pages/questions/[questionnaireId]/answers';
+import stringify from 'json-stable-stringify';
 
 const getChoices = (): Question[] => [
   {
@@ -39,8 +40,10 @@ const getChoices = (): Question[] => [
   },
 ];
 
-const render = (props: ComponentProps<typeof Answer>) =>
-  _render(<Answer {...props} />);
+global.fetch = jest.fn();
+
+const render = (props: ComponentProps<typeof AnswerPage>) =>
+  _render(<AnswerPage {...props} />);
 
 test('show answer page', () => {
   const target = render({ questions: getChoices() });
@@ -62,4 +65,50 @@ test('show answer page', () => {
     .getByText('好きな料理を教えてください。')
     .parentElement!.querySelector('textarea') as HTMLTextAreaElement;
   expect(question3.value).toBe('');
+});
+
+test('onCommit to fetch', async () => {
+  const target = render({ questions: getChoices() });
+  fireEvent.change(target.getByLabelText('回答者氏名'), {
+    target: { value: '海老原 賢次' },
+  });
+  fireEvent.click(target.getByLabelText('りんご'));
+  fireEvent.click(target.getByLabelText('ほうれん草'));
+  fireEvent.change(
+    target
+      .getByText('好きな料理を教えてください。')
+      .parentElement!.querySelector('textarea') as HTMLTextAreaElement,
+    {
+      target: { value: '山形屋の皿うどん' },
+    },
+  );
+  const q1a = target.getByLabelText('りんご') as HTMLInputElement;
+  // 値がステートに反映されるのを待つ
+  await waitFor(() => expect(q1a.checked).toBe(true));
+  fireEvent.click(target.getByText('回答する'));
+  await waitFor(() =>
+    expect(global.fetch).toBeCalledWith('/api/questionnaires/q001/answers', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: stringify({
+        name: '海老原 賢次',
+        answers: [
+          {
+            questionId: '001',
+            answer: ['apple'],
+          },
+          {
+            questionId: '002',
+            answer: 'spinach',
+          },
+          {
+            questionId: '003',
+            answer: '山形屋の皿うどん',
+          },
+        ],
+      }),
+    }),
+  );
 });

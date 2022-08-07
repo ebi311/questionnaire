@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useCallback, useMemo } from 'react';
+import { QuestionnaireAnswer } from '~/models/answer';
 import { Checkbox } from './Checkbox';
 
 type Props = {

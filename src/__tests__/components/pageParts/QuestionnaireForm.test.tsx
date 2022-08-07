@@ -124,9 +124,9 @@ test('set default answers', () => {
     answer: {
       name: '',
       answers: [
-        { questionnaireId: '001', answer: ['orange'] },
-        { questionnaireId: '002', answer: 'cabbage' },
-        { questionnaireId: '003', answer: 'ドリア' },
+        { questionId: '001', answer: ['orange'] },
+        { questionId: '002', answer: 'cabbage' },
+        { questionId: '003', answer: 'ドリア' },
       ],
     },
     onCommit: jest.fn(),
@@ -149,9 +149,9 @@ test('on commit', async () => {
     answer: {
       name: '',
       answers: [
-        { questionnaireId: '001', answer: ['orange'] },
-        { questionnaireId: '002', answer: 'cabbage' },
-        { questionnaireId: '003', answer: 'ドリア' },
+        { questionId: '001', answer: ['orange'] },
+        { questionId: '002', answer: 'cabbage' },
+        { questionId: '003', answer: 'ドリア' },
       ],
     },
     onCommit,
@@ -175,15 +175,16 @@ test('on commit', async () => {
     expect(onCommit).toHaveBeenCalledWith({
       name: '海老原 賢次',
       answers: [
-        { questionnaireId: '001', answer: ['orange'] },
-        { questionnaireId: '002', answer: 'cabbage' },
-        { questionnaireId: '003', answer: 'ドリア' },
+        { questionId: '001', answer: ['orange'] },
+        { questionId: '002', answer: 'cabbage' },
+        { questionId: '003', answer: 'ドリア' },
       ],
     }),
   );
 });
 
 test('validation', async () => {
+  expect.assertions(5);
   const onCommit = jest.fn();
   const target = render({
     questions: getChoices(),

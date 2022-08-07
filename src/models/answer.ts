@@ -1,5 +1,5 @@
 export type Answer = {
-  questionnaireId: string;
+  questionId: string;
   answer: string | string[];
 };
 
