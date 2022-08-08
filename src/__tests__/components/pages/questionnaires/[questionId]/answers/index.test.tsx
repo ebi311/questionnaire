@@ -87,7 +87,7 @@ test('onCommit to fetch', async () => {
   await waitFor(() => expect(q1a.checked).toBe(true));
   fireEvent.click(target.getByText('回答する'));
   await waitFor(() =>
-    expect(global.fetch).toBeCalledWith('/api/questionnaires/q001/answers', {
+    expect(global.fetch).toBeCalledWith('/api/answers', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

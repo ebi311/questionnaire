@@ -7,7 +7,7 @@ import stringify from 'json-stable-stringify';
 import { getQuestionnaire } from '~/data/questionnaires';
 
 const fetchAnswers = async (answer: QuestionnaireAnswer) =>
-  fetch(`/api/questionnaires/q001/answers`, {
+  fetch(`/api/answers`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -19,7 +19,7 @@ type Props = {
   questions: Question[];
 };
 
-const Answer: NextPage<Props> = props => {
+const Page: NextPage<Props> = props => {
   const { questions } = props;
 
   const onCommit = useCallback(async (args: QuestionnaireAnswer) => {
@@ -39,4 +39,4 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
   return { props: { questions } };
 };
 
-export default Answer;
+export default Page;
