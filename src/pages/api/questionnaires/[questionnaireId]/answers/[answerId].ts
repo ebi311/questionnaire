@@ -1,4 +1,3 @@
-import { nanoid } from 'nanoid';
 import { NextApiRequest, NextApiResponse } from 'next';
 import nc from 'next-connect';
 import { postAnswer } from '~/data/answers';
