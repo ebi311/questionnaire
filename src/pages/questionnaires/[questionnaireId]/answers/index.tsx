@@ -5,9 +5,13 @@ import { QuestionnaireAnswer } from '~/models/answer';
 import { Question } from '~/models/question';
 import stringify from 'json-stable-stringify';
 import { getQuestionnaire } from '~/data/questionnaires';
+import { useRouter } from 'next/router';
 
-const fetchAnswers = async (answer: QuestionnaireAnswer) =>
-  fetch(`/api/answers`, {
+const fetchAnswers = async (
+  answer: QuestionnaireAnswer,
+  questionnaireId: string,
+) =>
+  fetch(`/api/questionnaires/${questionnaireId}/answers/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -22,9 +26,14 @@ type Props = {
 const Page: NextPage<Props> = props => {
   const { questions } = props;
 
-  const onCommit = useCallback(async (args: QuestionnaireAnswer) => {
-    await fetchAnswers(args);
-  }, []);
+  const { query } = useRouter();
+
+  const onCommit = useCallback(
+    async (args: QuestionnaireAnswer) => {
+      await fetchAnswers(args, query.questionnaireId as string);
+    },
+    [query.questionnaireId],
+  );
 
   return (
     <div className="mx-auto my-1 w-fit">

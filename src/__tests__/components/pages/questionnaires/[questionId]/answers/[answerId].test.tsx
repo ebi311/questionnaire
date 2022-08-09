@@ -61,6 +61,14 @@ const answer = (): QuestionnaireAnswer => ({
 const render = (props: ComponentProps<typeof AnswerPage>) =>
   _render(<AnswerPage {...props} />);
 
+jest.mock('next/router', () => ({
+  useRouter: () => ({
+    query: {
+      questionnaireId: 'q001',
+    },
+  }),
+}));
+
 test('show answer page', () => {
   const target = render({ questions: getChoices(), answer: answer() });
   const question1Choices = target

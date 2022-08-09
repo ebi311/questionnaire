@@ -9,7 +9,8 @@ const app = nc<NextApiRequest, NextApiResponse>();
 app.post(async (req, res) => {
   const body = req.body as QuestionnaireAnswer;
   const id = nanoid();
-  await postAnswer(id, body);
+  const { questionnaireId } = req.query;
+  await postAnswer(questionnaireId as string, id, body);
   res.json({ id });
 });
 

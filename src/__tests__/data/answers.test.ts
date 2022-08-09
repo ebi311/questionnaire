@@ -19,19 +19,22 @@ jest.mock('fs/promises', () => ({
 }));
 
 test('get Answer', async () => {
-  const result = await getAnswer('001');
-  expect(fs.readFile).toBeCalledWith(path.resolve('./data/answers/001.json'), {
-    encoding: 'utf-8',
-  });
+  const result = await getAnswer('q001', '001');
+  expect(fs.readFile).toBeCalledWith(
+    path.resolve('./data/answers/q001-001.json'),
+    {
+      encoding: 'utf-8',
+    },
+  );
   expect(result).toEqual(getDummyAnswer());
 });
 
 test('post exist Answer', async () => {
   const data = getDummyAnswer();
-  data.name = 'リアクト 太郎';
-  const result = await postAnswer('002', data);
+  data.name = 'かるかん 太郎';
+  const result = await postAnswer('q001', '002', data);
   expect(fs.writeFile).toBeCalledWith(
-    path.resolve('./data/answers/002.json'),
+    path.resolve('./data/answers/q001-002.json'),
     stringify(data),
     {
       encoding: 'utf-8',

@@ -45,6 +45,14 @@ global.fetch = jest.fn();
 const render = (props: ComponentProps<typeof AnswerPage>) =>
   _render(<AnswerPage {...props} />);
 
+jest.mock('next/router', () => ({
+  useRouter: () => ({
+    query: {
+      questionnaireId: 'q001',
+    },
+  }),
+}));
+
 test('show answer page', () => {
   const target = render({ questions: getChoices() });
   const question1Choices = target
@@ -87,7 +95,7 @@ test('onCommit to fetch', async () => {
   await waitFor(() => expect(q1a.checked).toBe(true));
   fireEvent.click(target.getByText('回答する'));
   await waitFor(() =>
-    expect(global.fetch).toBeCalledWith('/api/answers', {
+    expect(global.fetch).toBeCalledWith('/api/questionnaires/q001/answers/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
